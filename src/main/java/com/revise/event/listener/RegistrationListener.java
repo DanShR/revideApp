@@ -15,14 +15,14 @@ import java.util.UUID;
 @Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
 
-   private UserService service;
+   private UserService userService;
 
    private JavaMailSender mailSender;
 
    private Environment env;
 
-   public RegistrationListener(UserService service, JavaMailSender mailSender, Environment env) {
-      this.service = service;
+   public RegistrationListener(UserService userService, JavaMailSender mailSender, Environment env) {
+      this.userService = userService;
       this.mailSender = mailSender;
       this.env = env;
    }
@@ -35,7 +35,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
    private void confirmRegistration(final OnRegistrationCompleteEvent event) {
       final User user = event.getUser();
       final String token = UUID.randomUUID().toString();
-      //service.createVerificationTokenForUser(user, token);
+      userService.createVerificationTokenForUser(user, token);
 
       final SimpleMailMessage email = constructEmailMessage(user, token);
       mailSender.send(email);
@@ -45,7 +45,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
    private SimpleMailMessage constructEmailMessage(final User user, final String token) {
       final String subject = "Registration Confirmation";
-      final String confirmationUrl = "http://localhost:8080/registrationConfirm.html?token=" + token;
+      final String confirmationUrl = "http://localhost:8080/api/confirm?token=" + token;
       final String message = "You registered successfully. To confirm your registration, please click on the below link. ";
 
       final SimpleMailMessage email = new SimpleMailMessage();

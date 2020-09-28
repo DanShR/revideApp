@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "USR")
+@Table(name = "usr")
 public class User {
 
    @JsonIgnore
@@ -46,6 +46,17 @@ public class User {
       inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
    @BatchSize(size = 20)
    private Set<Authority> authorities = new HashSet<>();
+
+   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+   private VerificationToken verificationToken;
+
+   public VerificationToken getVerificationToken() {
+      return verificationToken;
+   }
+
+   public void setVerificationToken(VerificationToken verificationToken) {
+      this.verificationToken = verificationToken;
+   }
 
    public Long getId() {
       return id;

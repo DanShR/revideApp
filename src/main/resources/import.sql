@@ -13,8 +13,12 @@
  INSERT INTO public.USR_AUTHORITY (USR_ID, AUTHORITY_NAME) VALUES (3, 'ROLE_USER');
 
 DELETE FROM public.USR_authority
-WHERE usr_id = ;
+WHERE usr_id = 32;
+
+DELETE FROM public.verification_token
+WHERE user_id = 32;
+
 
 DELETE FROM public.USR
-WHERE id = ;
+WHERE id = 32;
 */

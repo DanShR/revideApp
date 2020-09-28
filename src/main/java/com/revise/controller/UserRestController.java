@@ -68,6 +68,12 @@ public class UserRestController {
       return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
    }
 
+   @GetMapping("/confirm")
+   public HttpStatus confirmRegistration(@RequestParam(required = true, name = "token") String token) {
+      userService.confirmRegistration(token);
+      return HttpStatus.OK;
+   }
+
    @GetMapping("/user")
    public ResponseEntity<User> getActualUser() {
       return ResponseEntity.ok(userService.getUserWithAuthorities().get());

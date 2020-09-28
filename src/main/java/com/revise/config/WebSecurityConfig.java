@@ -93,7 +93,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
          .authorizeRequests()
          .antMatchers("/api/authenticate").permitAll()
          .antMatchers("/api/register").permitAll()
-         // .antMatchers("/api/activate").permitAll()
+         .antMatchers("/api/confirm").permitAll()
          // .antMatchers("/api/account/reset-password/init").permitAll()
          // .antMatchers("/api/account/reset-password/finish").permitAll()
 
