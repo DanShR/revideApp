@@ -1,6 +1,6 @@
 package com.revise.config;
 
-import com.revise.security.jwt.JwtAuthenticationEntryPoint;
+import com.revise.jwt.JwtAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,9 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
-import com.revise.security.jwt.JwtAccessDeniedHandler;
-import com.revise.security.jwt.JWTConfigurer;
-import com.revise.security.jwt.TokenProvider;
+import com.revise.jwt.JwtAccessDeniedHandler;
+import com.revise.jwt.JWTConfigurer;
+import com.revise.jwt.TokenProvider;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)

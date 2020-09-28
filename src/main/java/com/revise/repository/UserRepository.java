@@ -1,8 +1,8 @@
-package com.revise.security.repository;
+package com.revise.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.revise.security.model.User;
+import com.revise.model.User;
 
 import java.util.Optional;
 

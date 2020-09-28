@@ -1,6 +1,6 @@
-package com.revise.security.service;
+package com.revise.service;
 
-import com.revise.security.exception.UserNotActivatedException;
+import com.revise.exception.UserNotActivatedException;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import com.revise.security.model.User;
-import com.revise.security.repository.UserRepository;
+import com.revise.model.User;
+import com.revise.repository.UserRepository;
 
 import java.util.List;
 import java.util.Locale;

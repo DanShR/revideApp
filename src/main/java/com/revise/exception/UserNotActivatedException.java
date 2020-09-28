@@ -1,4 +1,4 @@
-package com.revise.security.exception;
+package com.revise.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

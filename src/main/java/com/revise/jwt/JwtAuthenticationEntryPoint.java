@@ -1,4 +1,4 @@
-package com.revise.security.jwt;
+package com.revise.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

@@ -1,49 +1,60 @@
 package com.revise.security.controller;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
 import com.revise.util.AbstractRestControllerTest;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.revise.util.LogInUtils.getTokenForLogin;
 
 public class UserRestControllerTest extends AbstractRestControllerTest {
 
-   @Before
-   public void setUp() {
-      SecurityContextHolder.clearContext();
-   }
-
    @Test
-   public void getActualUserForUserWithToken() throws Exception {
-      final String token = getTokenForLogin("user", "password", getMockMvc());
-
-      getMockMvc().perform(get("/api/user")
+   public void successfulAuthenticationWithUser() throws Exception {
+      getMockMvc().perform(post("/api/authenticate")
          .contentType(MediaType.APPLICATION_JSON)
-         .header("Authorization", "Bearer " + token))
+         .content("{\"password\": \"password\", \"username\": \"user\"}"))
          .andExpect(status().isOk())
-         .andExpect(content().json(
-            "{\n" +
-               "  \"username\" : \"user\",\n" +
-               "  \"firstname\" : \"user\",\n" +
-               "  \"lastname\" : \"user\",\n" +
-               "  \"email\" : \"enabled@user.com\",\n" +
-               "  \"authorities\" : [ {\n" +
-               "    \"name\" : \"ROLE_USER\"\n" +
-               "  } ]\n" +
-               "}"
-         ));
+         .andExpect(content().string(containsString("id_token")));
    }
 
    @Test
-   public void getActualUserForUserWithoutToken() throws Exception {
-      getMockMvc().perform(get("/api/user")
-         .contentType(MediaType.APPLICATION_JSON))
-         .andExpect(status().isUnauthorized());
+   public void successfulAuthenticationWithAdmin() throws Exception {
+      getMockMvc().perform(post("/api/authenticate")
+         .contentType(MediaType.APPLICATION_JSON)
+         .content("{\"password\": \"admin\", \"username\": \"admin\"}"))
+         .andExpect(status().isOk())
+         .andExpect(content().string(containsString("id_token")));
+   }
+
+   @Test
+   public void unsuccessfulAuthenticationWithDisabled() throws Exception {
+      getMockMvc().perform(post("/api/authenticate")
+         .contentType(MediaType.APPLICATION_JSON)
+         .content("{\"password\": \"password\", \"username\": \"disabled\"}"))
+         .andExpect(status().isUnauthorized())
+         .andExpect(content().string(not(containsString("id_token"))));
+   }
+
+   @Test
+   public void unsuccessfulAuthenticationWithWrongPassword() throws Exception {
+      getMockMvc().perform(post("/api/authenticate")
+         .contentType(MediaType.APPLICATION_JSON)
+         .content("{\"password\": \"wrong\", \"username\": \"user\"}"))
+         .andExpect(status().isUnauthorized())
+         .andExpect(content().string(not(containsString("id_token"))));
+   }
+
+   @Test
+   public void unsuccessfulAuthenticationWithNotExistingUser() throws Exception {
+      getMockMvc().perform(post("/api/authenticate")
+         .contentType(MediaType.APPLICATION_JSON)
+         .content("{\"password\": \"password\", \"username\": \"not_existing\"}"))
+         .andExpect(status().isUnauthorized())
+         .andExpect(content().string(not(containsString("id_token"))));
    }
 
 }

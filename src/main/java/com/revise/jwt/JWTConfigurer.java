@@ -1,4 +1,4 @@
-package com.revise.security.jwt;
+package com.revise.jwt;
 
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

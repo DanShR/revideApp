@@ -1,4 +1,4 @@
-package com.revise.security.model;
+package com.revise.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

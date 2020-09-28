@@ -1,4 +1,4 @@
-package com.revise.security.model;
+package com.revise.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.BatchSize;
@@ -30,14 +30,6 @@ public class User {
    @NotNull
    @Size(min = 4, max = 100)
    private String password;
-
-   @Column(name = "firstname", length = 50)
-   @Size(min = 4, max = 50)
-   private String firstname;
-
-   @Column(name = "lastname", length = 50)
-   @Size(min = 4, max = 50)
-   private String lastname;
 
    @Column(name = "email", length = 50)
    @Size(min = 4, max = 50)
@@ -77,22 +69,6 @@ public class User {
 
    public void setPassword(String password) {
       this.password = password;
-   }
-
-   public String getFirstname() {
-      return firstname;
-   }
-
-   public void setFirstname(String firstname) {
-      this.firstname = firstname;
-   }
-
-   public String getLastname() {
-      return lastname;
-   }
-
-   public void setLastname(String lastname) {
-      this.lastname = lastname;
    }
 
    public String getEmail() {
@@ -137,8 +113,6 @@ public class User {
       return "User{" +
          "username='" + username + '\'' +
          ", password='" + password + '\'' +
-         ", firstname='" + firstname + '\'' +
-         ", lastname='" + lastname + '\'' +
          ", email='" + email + '\'' +
          ", activated=" + activated +
          '}';

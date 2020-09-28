@@ -1,4 +1,4 @@
-package com.revise.security.jwt;
+package com.revise.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

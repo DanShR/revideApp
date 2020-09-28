@@ -1,6 +1,6 @@
 package com.revise.security;
 
-import com.revise.security.util.SecurityUtils;
+import com.revise.util.SecurityUtils;
 import org.junit.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;

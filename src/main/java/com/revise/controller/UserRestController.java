@@ -1,6 +1,14 @@
-package com.revise.security.controller;
+package com.revise.controller;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.revise.controller.dto.LoginDto;
+import com.revise.controller.dto.RegisterDto;
+import com.revise.event.OnRegistrationCompleteEvent;
+import com.revise.jwt.JWTFilter;
+import com.revise.jwt.JWTToken;
+import com.revise.jwt.TokenProvider;
+import com.revise.model.User;
+import com.revise.service.UserService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,16 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.revise.security.model.User;
-import com.revise.security.controller.dto.LoginDto;
-import com.revise.security.jwt.JWTFilter;
-import com.revise.security.jwt.TokenProvider;
-import com.revise.security.controller.dto.RegisterDto;
-import com.revise.security.service.UserService;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -26,7 +25,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/api")
-public class AuthenticationRestController {
+public class UserRestController {
 
    private final TokenProvider tokenProvider;
 
@@ -34,21 +33,21 @@ public class AuthenticationRestController {
 
    private final UserService userService;
 
-   public AuthenticationRestController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, UserService userService) {
+   private ApplicationEventPublisher eventPublisher;
+
+   public UserRestController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, UserService userService, ApplicationEventPublisher eventPublisher) {
       this.tokenProvider = tokenProvider;
       this.authenticationManagerBuilder = authenticationManagerBuilder;
       this.userService = userService;
+      this.eventPublisher = eventPublisher;
    }
 
    @PostMapping("/register")
-   public ResponseEntity<?>  register(@Valid @RequestBody RegisterDto registerDto) {
+   public HttpStatus  register(@Valid @RequestBody RegisterDto registerDto) {
 
       User user = userService.addUser(registerDto);
-      if (user == null)
-         return  new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-      else
-         return new ResponseEntity<>(user, HttpStatus.OK);
-
+      eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
+      return HttpStatus.OK;
    }
 
    @PostMapping("/authenticate")
@@ -69,24 +68,9 @@ public class AuthenticationRestController {
       return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
    }
 
-   /**
-    * Object to return as body in JWT Authentication.
-    */
-   static class JWTToken {
-
-      private String idToken;
-
-      JWTToken(String idToken) {
-         this.idToken = idToken;
-      }
-
-      @JsonProperty("id_token")
-      String getIdToken() {
-         return idToken;
-      }
-
-      void setIdToken(String idToken) {
-         this.idToken = idToken;
-      }
+   @GetMapping("/user")
+   public ResponseEntity<User> getActualUser() {
+      return ResponseEntity.ok(userService.getUserWithAuthorities().get());
    }
+
 }

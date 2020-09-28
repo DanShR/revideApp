@@ -1,14 +1,15 @@
-package com.revise.security.service;
+package com.revise.service;
 
+import com.revise.exception.PasswordConfirmException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.revise.security.util.SecurityUtils;
-import com.revise.security.exception.UserAlreadyExistException;
-import com.revise.security.model.User;
-import com.revise.security.repository.AuthorityRepository;
-import com.revise.security.repository.UserRepository;
-import com.revise.security.controller.dto.RegisterDto;
+import com.revise.util.SecurityUtils;
+import com.revise.exception.UserAlreadyExistException;
+import com.revise.model.User;
+import com.revise.repository.AuthorityRepository;
+import com.revise.repository.UserRepository;
+import com.revise.controller.dto.RegisterDto;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -37,14 +38,19 @@ public class UserService {
    @Transactional
    public User addUser(RegisterDto registerDto) {
 
+      if (!registerDto.getPassword().equals(registerDto.getPasswordConfirm())) {
+         throw new PasswordConfirmException();
+      }
+
       if (userRepository.findByUsername(registerDto.getUsername()) != null) {
-         throw new UserAlreadyExistException("Username already exist");
+         throw new UserAlreadyExistException();
       }
 
       User user = new User();
       user.setUsername(registerDto.getUsername());
       user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-      user.setActivated(true);
+      user.setEmail(registerDto.getEmail());
+      user.setActivated(false);
       user.setAuthorities(Collections.singleton(authorityRepository.findByName("ROLE_USER")));
       return userRepository.save(user);
    }

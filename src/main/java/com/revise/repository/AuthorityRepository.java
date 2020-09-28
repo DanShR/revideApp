@@ -1,7 +1,7 @@
-package com.revise.security.repository;
+package com.revise.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.revise.security.model.Authority;
+import com.revise.model.Authority;
 
 /**
  * Spring Data JPA repository for the {@link Authority} entity.
