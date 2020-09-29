@@ -14,10 +14,6 @@ spring:
     hibernate:
       ddl-auto: update
 
-#  h2:
-#    console:
-#      # URL: jdbc:h2:mem:testdb
-#      enabled: true
   datasource:
     platform: postgres
     url: jdbc:postgresql://localhost:5432/revise

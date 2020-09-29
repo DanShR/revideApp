@@ -1,10 +1,13 @@
 package com.revise.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "verification_token")
+@Data
 public class VerificationToken {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,38 +24,4 @@ public class VerificationToken {
    @Column(name = "activation_date")
    private LocalDateTime activationDate;
 
-   public VerificationToken() {
-   }
-
-   public LocalDateTime getActivationDate() {
-      return activationDate;
-   }
-
-   public void setActivationDate(LocalDateTime activationDate) {
-      this.activationDate = activationDate;
-   }
-
-   public User getUser() {
-      return user;
-   }
-
-   public void setUser(User user) {
-      this.user = user;
-   }
-
-   public long getId() {
-      return id;
-   }
-
-   public void setId(long id) {
-      this.id = id;
-   }
-
-   public String getToken() {
-      return token;
-   }
-
-   public void setToken(String token) {
-      this.token = token;
-   }
 }
