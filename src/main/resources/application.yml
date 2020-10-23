@@ -1,44 +1,45 @@
-server:
-  servlet:
-    context-path: /
+#server:
+#  servlet:
+#    context-path: /
 
 # better readable jackson serialization format
-spring:
-  jackson:
-    serialization:
-      INDENT_OUTPUT: true
+#spring:
+#  jackson:
+#    serialization:
+#      INDENT_OUTPUT: true
 
-  jpa:
-    database: POSTGRESQL
-    show-sql: true
-    hibernate:
-      ddl-auto: update
+#  jpa:
+#    database: POSTGRESQL
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: update
 
-  datasource:
-    platform: postgres
-    url: jdbc:postgresql://localhost:5432/revise
-    username: postgres
-    password: 1q2w3e1q
-    driverClassName: org.postgresql.Driver
 
-  devtools:
-    restart:
-      enabled: true
+#  datasource:
+#    platform: postgres
+#    url: jdbc:postgresql://localhost:5432/revise
+#    username: postgres
+#    password: 1q2w3e1q
+#    driverClassName: org.postgresql.Driver
 
-jwt:
-  header: Authorization
-  # This token must be encoded using Base64 with mininum 88 Bits (you can type `echo 'secret-key'|base64` on your command line)
-  base64-secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
-  # token is valid 24 hours
-  token-validity-in-seconds: 86400
-  # valid 30 hours
-  token-validity-in-seconds-for-remember-me: 108000
-  route:
-    authentication:
-      path: auth
-      refresh: refresh
+#  devtools:
+#    restart:
+#      enabled: true
 
-logging:
-  level:
-    org.zerhusen.security: DEBUG
+#jwt:
+#  header: Authorization
+#  # This token must be encoded using Base64 with mininum 88 Bits (you can type `echo 'secret-key'|base64` on your command line)
+#  base64-secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
+#  # token is valid 24 hours
+#  token-validity-in-seconds: 86400
+#  # valid 30 hours
+#  token-validity-in-seconds-for-remember-me: 108000
+#  route:
+#    authentication:
+#      path: auth
+#      refresh: refresh
+
+#logging:
+#  level:
+#    org.zerhusen.security: DEBUG
 #    org.springframework.security: DEBUG

@@ -6,6 +6,7 @@ import com.revise.model.VerificationToken;
 import com.revise.repository.VerificationTokenRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.revise.util.SecurityUtils;
 import com.revise.exception.UserAlreadyExistException;
@@ -42,6 +43,11 @@ public class UserService {
       return SecurityUtils.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
    }
 
+   @Transactional(readOnly = true)
+   public Optional<User> getCurrentUser() {
+      return SecurityUtils.getCurrentUsername().flatMap(userRepository::findByUsername);
+   }
+
    @Transactional
    public User addUser(RegisterDto registerDto) {
 
@@ -49,9 +55,16 @@ public class UserService {
          throw new PasswordConfirmException();
       }
 
-      if (userRepository.findByUsername(registerDto.getUsername()) != null) {
+      Optional<User> byUsername = userRepository.findByUsername(registerDto.getUsername());
+      if (!byUsername.isEmpty()) {
          throw new UserAlreadyExistException();
       }
+
+      Optional<User> byEmail = userRepository.findByEmail(registerDto.getEmail());
+      if (!byEmail.isEmpty()){
+         throw new RuntimeException("email already exist");
+      }
+
 
       User user = new User();
       user.setUsername(registerDto.getUsername());
@@ -80,5 +93,9 @@ public class UserService {
        User user = verificationToken.getUser();
        user.setActivated(true);
        userRepository.save(user);
+    }
+
+    public Optional<User> findByUsername(String username) {
+       return userRepository.findByUsername(username);
     }
 }

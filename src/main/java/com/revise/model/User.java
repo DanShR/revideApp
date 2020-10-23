@@ -33,6 +33,7 @@ public class User {
    @Size(min = 4, max = 100)
    private String password;
 
+   @JsonIgnore
    @Column(name = "email", length = 50)
    @Size(min = 4, max = 50)
    private String email;
@@ -41,15 +42,17 @@ public class User {
    @Column(name = "activated")
    private boolean activated;
 
-   @ManyToMany
+   @ManyToMany(targetEntity = Authority.class, fetch = FetchType.EAGER)
    @JoinTable(
       name = "USR_AUTHORITY",
       joinColumns = {@JoinColumn(name = "usr_id", referencedColumnName = "id")},
       inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
    @BatchSize(size = 20)
+   @JsonIgnore
    private Set<Authority> authorities = new HashSet<>();
 
-   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+   @OneToOne(targetEntity = VerificationToken.class, mappedBy = "user", fetch = FetchType.LAZY)
+   @JsonIgnore
    private VerificationToken verificationToken;
 
 }

@@ -1,12 +1,11 @@
 package com.revise.event.listener;
 
 import com.revise.event.OnRegistrationCompleteEvent;
+import com.revise.mail.MailgunSender;
+import com.revise.mail.VerificationMail;
 import com.revise.model.User;
 import com.revise.service.UserService;
 import org.springframework.context.ApplicationListener;
-import org.springframework.core.env.Environment;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -17,14 +16,11 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
    private UserService userService;
 
-   private JavaMailSender mailSender;
+   private MailgunSender mailgunSender;
 
-   private Environment env;
-
-   public RegistrationListener(UserService userService, JavaMailSender mailSender, Environment env) {
+   public RegistrationListener(UserService userService, MailgunSender mailgunSender) {
       this.userService = userService;
-      this.mailSender = mailSender;
-      this.env = env;
+      this.mailgunSender = mailgunSender;
    }
 
    @Override
@@ -37,25 +33,20 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
       final String token = UUID.randomUUID().toString();
       userService.createVerificationTokenForUser(user, token);
 
-      final SimpleMailMessage email = constructEmailMessage(user, token);
-      mailSender.send(email);
+      final VerificationMail verificationMail = constructVerificationMail(user, token);
+      mailgunSender.sendMail(verificationMail);
+
    }
 
-   //
 
-   private SimpleMailMessage constructEmailMessage(final User user, final String token) {
+   private VerificationMail constructVerificationMail(final User user, final String token) {
       final String subject = "Registration Confirmation";
       final String confirmationUrl = "http://localhost:8080/api/confirm?token=" + token;
-      final String message = "You registered successfully. To confirm your registration, please click on the below link. ";
-
-      final SimpleMailMessage email = new SimpleMailMessage();
-      email.setTo(user.getEmail());
-      email.setSubject(subject);
-      email.setText(message + " \r\n" + confirmationUrl);
-      email.setFrom(env.getProperty("support.email"));
-
-      return email;
+      final String text = "You registered successfully. To confirm your registration, please click on the below link. ";
+      return new VerificationMail(user.getEmail(), subject, text + " \r\n" + confirmationUrl);
    }
+
+
 
 
 }
